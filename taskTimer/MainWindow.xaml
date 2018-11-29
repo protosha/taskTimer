@@ -8,7 +8,7 @@
         Height="350" Width="525" 
         WindowState="Maximized" 
         ResizeMode="NoResize" 
-        WindowStyle="SingleBorderWindow"
+        WindowStyle="None"
         Closing="MainWindow_OnClosing"
         KeyUp="MainWindow_OnKeyUp">
     <Window.Resources>

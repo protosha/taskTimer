@@ -11,9 +11,9 @@
             <RowDefinition Height="5*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock FontSize="20" FontWeight="Bold" 
+        <TextBlock FontSize="50" FontWeight="Bold" 
                    HorizontalAlignment="Center" VerticalAlignment="Center" 
                    Text="{Binding Path=TimeLeft}" />
-        <Image Grid.Row="1" Source="pack://application:,,,/Resources/background.bmp" />
+        <Image Grid.Row="1" Source="pack://application:,,,/Resources/background.jpg" />
     </Grid>
 </UserControl>

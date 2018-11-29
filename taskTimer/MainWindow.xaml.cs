@@ -27,12 +27,16 @@ namespace taskTimer
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        public MainWindow()
+        private string _hintText;
+        private TimeSpan _spanLeft;
+
+        public MainWindow(string hintText, TimeSpan spanLeft)
         {
             InitializeComponent();
-
+            _hintText = hintText;
+            _spanLeft = spanLeft;
             DataContext = this;
-            CurrentViewModel = new HintViewModel(new HintModel() {Text = "This is hint!"});
+            CurrentViewModel = new HintViewModel(new HintModel() {Text = _hintText});
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -59,7 +63,7 @@ namespace taskTimer
 
         void MainWindow_OnClosing(object sender, CancelEventArgs e)
         {
-            //e.Cancel = true;
+            e.Cancel = true;
         }
 
         void MainWindow_OnKeyUp(object sender, KeyEventArgs e)
@@ -69,7 +73,7 @@ namespace taskTimer
             }
 
             long currentTicks = Environment.TickCount * 10000L;
-            long endTicks = currentTicks + new TimeSpan(0, 0, 5).Ticks;
+            long endTicks = currentTicks + _spanLeft.Ticks;
             var timerViewModel = new TimerViewModel(new TimerModel() {
                 CurrentTicks = currentTicks,
                 EndTicks = endTicks
@@ -77,14 +81,30 @@ namespace taskTimer
             CurrentViewModel = timerViewModel;
 
             var timer = new DispatcherTimer();
+            var warnTimer = new DispatcherTimer();
+            int warnSecondsThreshold = 5;
+            Action beep = Console.Beep;
+            warnTimer.Tick += (timerSender, timerEventArgs) => {
+                beep.BeginInvoke((a) => { beep.EndInvoke(a); }, null);
+            };
+            warnTimer.Interval = new TimeSpan(0, 0, 1);
             timer.Tick += (timerSender, timerEventArgs) => {
-                timerViewModel.CurrentTicks = Environment.TickCount * 10000L;
-                if (timerViewModel.Model.EndTicks - timerViewModel.CurrentTicks <= 0) {
-                    timer.Stop();
+                currentTicks = Environment.TickCount * 10000L;
+                if (new TimeSpan(timerViewModel.Model.EndTicks - currentTicks).Seconds <= warnSecondsThreshold) {
+                    warnTimer.Start();
                 }
+                if (timerViewModel.Model.EndTicks - currentTicks <= 0) {
+                    timerViewModel.CurrentTicks = timerViewModel.Model.EndTicks;
+                    timer.Stop();
+                    warnTimer.Stop();
+                    return;
+                }
+                timerViewModel.CurrentTicks = currentTicks;
             };
             timer.Interval = new TimeSpan(0, 0, 0, 0, 10);
             timer.Start();
+
+
         }
     }
 }
