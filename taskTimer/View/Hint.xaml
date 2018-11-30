@@ -14,7 +14,7 @@
         <TextBlock Grid.Column="1"
                    TextWrapping="Wrap" 
                    TextAlignment="Center"
-                   FontSize="50" 
+                   FontSize="70" 
                    VerticalAlignment="Center" 
                    HorizontalAlignment="Center"
                    Text="{Binding Path=HintText}" />

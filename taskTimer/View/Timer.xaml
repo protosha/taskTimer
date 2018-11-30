@@ -6,14 +6,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="600">
     <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="pack://application:,,,/Resources/background.jpg" Stretch="UniformToFill" />
+        </Grid.Background>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
+            <RowDefinition Height="2*" />
             <RowDefinition Height="5*" />
-            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock FontSize="50" FontWeight="Bold" 
+        <TextBlock Grid.Row="1"
+                   FontSize="200" FontWeight="Bold" 
                    HorizontalAlignment="Center" VerticalAlignment="Center" 
                    Text="{Binding Path=TimeLeft}" />
-        <Image Grid.Row="1" Source="pack://application:,,,/Resources/background.jpg" />
     </Grid>
 </UserControl>
